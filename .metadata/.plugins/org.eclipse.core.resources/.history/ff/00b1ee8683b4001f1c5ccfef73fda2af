@@ -1,0 +1,80 @@
+package kr.ac.kku.cs.wp.wsd;
+
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
+
+import java.util.Arrays;
+import java.util.List;
+
+import org.hibernate.SessionFactory;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import kr.ac.kku.cs.wp.wsd.dao.BoardDAO;
+import kr.ac.kku.cs.wp.wsd.model.Board;
+import kr.ac.kku.cs.wp.wsd.support.sql.HibernateUtil;
+
+class HibernateTest {
+
+    private SessionFactory sessionFactoryMock;
+    private BoardDAO boardDAOMock;
+
+    @BeforeEach
+    void setUp() {
+        // HibernateUtil 대신 Mockito로 SessionFactory Mock 생성
+        sessionFactoryMock = mock(SessionFactory.class);
+        boardDAOMock = mock(BoardDAO.class);
+    }
+
+    @AfterEach
+    void tearDown() {
+        HibernateUtil.shutdown();
+    }
+
+    @Test
+    void testSaveBoard() {
+        // Given
+        Board board = new Board("테스트 제목", "테스트 내용");
+
+        // When
+        boardDAOMock.saveBoard(board);
+
+        // Then
+        verify(boardDAOMock, times(1)).saveBoard(board); // 저장 메서드가 한 번 호출되었는지 검증
+    }
+
+    @Test
+    void testGetAllBoards() {
+        // Given
+        List<Board> mockBoards = Arrays.asList(
+                new Board(1, "첫 번째 게시글", "내용1"),
+                new Board(2, "두 번째 게시글", "내용2")
+        );
+        when(boardDAOMock.getAllBoards()).thenReturn(mockBoards);
+
+        // When
+        List<Board> boards = boardDAOMock.getAllBoards();
+
+        // Then
+        assertEquals(2, boards.size()); // 결과 검증
+        assertEquals("첫 번째 게시글", boards.get(0).getTitle());
+        verify(boardDAOMock, times(1)).getAllBoards(); // 호출 횟수 검증
+    }
+
+    @Test
+    void testGetBoardById() {
+        // Given
+        Board mockBoard = new Board(1, "테스트 제목", "테스트 내용");
+        when(boardDAOMock.getBoardById(1)).thenReturn(mockBoard);
+
+        // When
+        Board board = boardDAOMock.getBoardById(1);
+
+        // Then
+        assertEquals(1, board.getId());
+        assertEquals("테스트 제목", board.getTitle());
+        verify(boardDAOMock, times(1)).getBoardById(1);
+    }
+}

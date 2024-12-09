@@ -1,0 +1,55 @@
+package kr.ac.kku.cs.wp.wsd.service;
+
+
+import kr.ac.kku.cs.wp.wsd.dao.BoardDAO;
+import kr.ac.kku.cs.wp.wsd.model.Board;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class BoardService {
+
+    private final BoardDAO boardDAO;
+
+    @Autowired
+    public BoardService(BoardDAO boardDAO) {
+        this.boardDAO = boardDAO;
+    }
+
+    public List<Board> getAllBoards() {
+        return boardDAO.getAllBoards();
+    }
+
+    public Board getBoardById(int id) {
+        return boardDAO.getBoardById(id);
+    }
+
+    public void createBoard(String title, String content) {
+        Board board = new Board();
+        board.setTitle(title);
+        board.setContent(content);
+        boardDAO.saveBoard(board);
+    }
+
+    public boolean updateBoard(int id, String title, String content) {
+        Board board = boardDAO.getBoardById(id);
+        if (board == null) {
+            return false;
+        }
+        board.setTitle(title);
+        board.setContent(content);
+        boardDAO.updateBoard(board);
+        return true;
+    }
+
+    public boolean deleteBoard(int id) {
+        Board board = boardDAO.getBoardById(id);
+        if (board == null) {
+            return false;
+        }
+        boardDAO.deleteBoard(board);
+        return true;
+    }
+}

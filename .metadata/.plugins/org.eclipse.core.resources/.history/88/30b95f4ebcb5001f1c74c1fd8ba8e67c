@@ -1,0 +1,90 @@
+package kr.ac.kku.cs.wp.wsd;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import java.util.Arrays;
+import java.util.Optional;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import kr.ac.kku.cs.wp.wsd.dao.BoardDAO;
+import kr.ac.kku.cs.wp.wsd.model.Board;
+import kr.ac.kku.cs.wp.wsd.service.BoardService;
+
+class BoardServiceTest {
+
+    @Mock
+    private BoardDAO boardDAO;
+
+    @InjectMocks
+    private BoardService boardService;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    // Create 테스트
+    @Test
+    void testCreateBoard() {
+        Board board = new Board("Test Title", "Test Content");
+
+        boardService.createBoard(board.getTitle(), board.getContent());
+
+        verify(boardDAO, times(1)).saveBoard(any(Board.class));
+    }
+
+    // Read 테스트
+
+    @Test
+    void testGetBoardById() {
+        Board board = new Board("Test Title", "Test Content");
+        board.setId(1);
+
+        // Mockito에서 board를 반환하도록 설정
+        when(boardDAO.getBoardById(1)).thenReturn(board);
+
+        Board result = boardService.getBoardById(1);
+
+        assertNotNull(result); // 결과가 null이 아님을 확인
+        assertEquals("Test Title", result.getTitle()); // 제목 검증
+        assertEquals("Test Content", result.getContent()); // 내용 검증
+    }
+
+    // Update 테스트
+    @Test
+    void testUpdateBoard() {
+        Board board = new Board("Old Title", "Old Content");
+        board.setId(1);
+
+        when(boardDAO.getBoardById(1)).thenReturn(board);
+
+        boardService.updateBoard(1, "New Title", "New Content");
+
+        verify(boardDAO, times(1)).updateBoard(any(Board.class));
+        assertEquals("New Title", board.getTitle());
+        assertEquals("New Content", board.getContent());
+    }
+
+    // Delete 테스트
+    @Test
+    void testDeleteBoard() {
+        Board board = new Board("Test Title", "Test Content");
+        board.setId(1);
+
+        // Mock DAO의 반환 값 설정
+        when(boardDAO.getBoardById(1)).thenReturn(board);
+
+        // 서비스 계층에서 삭제 메서드 호출
+        boardService.deleteBoard(1);
+
+        // DAO의 deleteBoard 메서드 호출 여부 검증
+        verify(boardDAO, times(1)).deleteBoard(board);
+    }
+
+}

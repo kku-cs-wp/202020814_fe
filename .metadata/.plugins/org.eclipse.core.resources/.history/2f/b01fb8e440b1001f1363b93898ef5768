@@ -1,0 +1,57 @@
+package kr.ac.kku.cs.wp.wsd.dao;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+
+import kr.ac.kku.cs.wp.wsd.model.Board;
+
+import java.util.List;
+
+public class BoardDAO {
+    private final SessionFactory sessionFactory;
+
+    public BoardDAO(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
+    // 게시글 저장
+    public void saveBoard(Board board) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.persist(board);
+            session.getTransaction().commit();
+        }
+    }
+
+    // 모든 게시글 조회
+    public List<Board> getAllBoards() {
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("from Board", Board.class).list();
+        }
+    }
+
+    // ID로 게시글 조회
+    public Board getBoardById(int id) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.get(Board.class, id);
+        }
+    }
+
+    // 게시글 업데이트
+    public void updateBoard(Board board) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.update(board);
+            session.getTransaction().commit();
+        }
+    }
+
+    // 게시글 삭제
+    public void deleteBoard(Board board) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.delete(board);
+            session.getTransaction().commit();
+        }
+    }
+}
