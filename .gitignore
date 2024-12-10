@@ -1,0 +1,11 @@
+# Ignore all files by default
+*
+
+# Allow specific folders and files
+!wsd/
+!wsd/src/
+!wsd/src/**     # Include all files and subdirectories inside src/
+!wsd/pom.xml
+
+# Ensure .gitignore itself is tracked
+!.gitignore
