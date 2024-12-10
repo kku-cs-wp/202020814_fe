@@ -1,0 +1,48 @@
+package kr.ac.kku.cs.wp.wsd.support.sql;
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+
+package kr.ac.kku.cs.wp.wsd.support.sql;
+
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+
+public class HibernateUtil {
+
+    private static SessionFactory sessionFactory;
+
+    static {
+        try {
+            // Hibernate StandardServiceRegistry 초기화
+            StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
+                    .configure("hibernate.cfg.xml") // hibernate.cfg.xml 파일 로드
+                    .build();
+
+            // MetadataSources 및 Metadata 생성
+            Metadata metadata = new MetadataSources(registry).getMetadataBuilder().build();
+
+            // SessionFactory 생성
+            sessionFactory = metadata.getSessionFactoryBuilder().build();
+
+        } catch (Exception e) {
+            // 예외 발생 시 초기화 실패 메시지와 함께 출력
+            System.err.println("SessionFactory initialization failed: " + e.getMessage());
+            e.printStackTrace();
+            throw new ExceptionInInitializerError("SessionFactory initialization failed. Check the configuration.");
+        }
+    }
+
+    /**
+     * SessionFactory 반환 메서드
+     *
+     * @return SessionFactory
+     */
+    public static SessionFactory getSessionFactory() {
+        if (sessionFactory == null) {
+            throw new IllegalStateException("SessionFactory is not initialized.");

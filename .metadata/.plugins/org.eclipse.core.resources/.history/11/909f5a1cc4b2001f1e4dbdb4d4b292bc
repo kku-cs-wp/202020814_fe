@@ -1,0 +1,22 @@
+package kr.ac.kku.cs.wp.wsd;
+
+import kr.ac.kku.cs.wp.wsd.dao.BoardDAO;
+import kr.ac.kku.cs.wp.wsd.model.Board;
+import kr.ac.kku.cs.wp.wsd.support.sql.HibernateUtil;
+
+public class HibernateTest {
+    public static void main(String[] args) {
+        BoardDAO boardDAO = new BoardDAO();
+
+        // 데이터 저장
+        Board board = new Board("테스트 제목", "테스트 내용");
+        boardDAO.saveBoard(board);
+
+        // 데이터 조회
+        boardDAO.getAllBoards().forEach(b -> {
+            System.out.println(b.getId() + ": " + b.getTitle() + " - " + b.getContent());
+        });
+
+        HibernateUtil.shutdown(); // 세션 팩토리 종료
+    }
+}

@@ -1,0 +1,44 @@
+package kr.ac.kku.cs.wp.wsd.user.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import kr.ac.kku.cs.wp.wsd.model.Board;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Controller
+public class BoardController {
+    private List<Board> boards = new ArrayList<>();
+
+    public BoardController() {
+        // 초기 게시글 데이터
+        boards.add(new Board(1, "첫 번째 게시글", "안녕하세요, 첫 번째 게시글입니다."));
+        boards.add(new Board(2, "두 번째 게시글", "안녕하세요, 두 번째 게시글입니다."));
+    }
+
+    // 게시글 목록
+    @GetMapping("board")
+    public String listBoards(Model model) {
+        model.addAttribute("boards", boards);
+        return "BoardList"; // boardList.jsp 렌더링
+    }
+
+    // 게시글 작성 폼
+    @GetMapping("boards/new")
+    public String showCreateForm() {
+        return "BoardForm"; // boardForm.jsp 렌더링
+    }
+
+    // 게시글 추가
+    @PostMapping("/board")
+    public String createBoard(@RequestParam("title") String title, @RequestParam("content") String content) {
+        int id = boards.isEmpty() ? 1 : boards.get(boards.size() - 1).getId() + 1; // ID 생성 로직 개선
+        boards.add(new Board(id, title, content));
+        return "redirect:/board";
+    }
+
+
+}

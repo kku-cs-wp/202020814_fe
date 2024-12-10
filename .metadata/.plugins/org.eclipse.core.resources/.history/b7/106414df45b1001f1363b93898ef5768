@@ -1,0 +1,57 @@
+package kr.ac.kku.cs.wp.wsd.service;
+
+import kr.ac.kku.cs.wp.wsd.dao.BoardDAO;
+import kr.ac.kku.cs.wp.wsd.model.Board;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class BoardService {
+
+    private final BoardDAO boardDAO;
+
+    @Autowired
+    public BoardService(BoardDAO boardDAO) {
+        this.boardDAO = boardDAO;
+    }
+
+    // 모든 게시글 조회
+    public List<Board> getAllBoards() {
+        return boardDAO.getAllBoards();
+    }
+
+    // ID로 게시글 조회
+    public Board getBoardById(int id) {
+        return boardDAO.getBoardById(id);
+    }
+
+    // 게시글 생성
+    public boolean createBoard(String title, String content) {
+        Board board = new Board();
+        board.setTitle(title);
+        board.setContent(content);
+        return boardDAO.saveBoard(board);
+    }
+
+    // 게시글 수정
+    public boolean updateBoard(int id, String title, String content) {
+        Board board = boardDAO.getBoardById(id);
+        if (board == null) {
+            return false; // 게시글을 찾을 수 없음
+        }
+        board.setTitle(title);
+        board.setContent(content);
+        return boardDAO.updateBoard(board);
+    }
+
+    // 게시글 삭제
+    public boolean deleteBoard(int id) {
+        Board board = boardDAO.getBoardById(id);
+        if (board == null) {
+            return false; // 게시글을 찾을 수 없음
+        }
+        return boardDAO.deleteBoard(board);
+    }
+}

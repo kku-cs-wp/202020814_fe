@@ -1,0 +1,30 @@
+package kr.ac.kku.cs.wp.wsd;
+
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+class CreateServiceTest {
+
+    @Mock
+    private BoardDAO boardDAO;
+
+    @InjectMocks
+    private CreateService createService; // CreateService가 정확히 초기화됨
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this); // Mockito 초기화
+    }
+
+    @Test
+    void testCreateBoard() {
+        createService.createBoard("Test Title", "Test Content"); // 메서드 호출
+        verify(boardDAO).saveBoard(any());
+    }
+}

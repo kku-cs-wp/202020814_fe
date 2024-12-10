@@ -1,0 +1,69 @@
+package kr.ac.kku.cs.wp.wsd;
+
+import static org.mockito.Mockito.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import kr.ac.kku.cs.wp.wsd.dao.BoardDAO;
+import kr.ac.kku.cs.wp.wsd.model.Board;
+
+class CreateServiceTest {
+
+    @Mock
+    private BoardDAO boardDAO;
+
+    @InjectMocks
+    private CreateService createService;
+
+    @BeforeEach
+    void setUp() {
+        // Mockito 초기화
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    void testCreateBoard_Success() {
+        // Given
+        String title = "Test Title";
+        String content = "Test Content";
+
+        // When
+        createService.createBoard(title, content);
+
+        // Then
+        verify(boardDAO, times(1)).saveBoard(any(Board.class));
+    }
+
+    @Test
+    void testCreateBoard_EmptyTitle() {
+        // Given
+        String title = "";
+        String content = "Test Content";
+
+        // When & Then
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            createService.createBoard(title, content);
+        });
+
+        assertEquals("제목은 비어 있을 수 없습니다.", exception.getMessage());
+    }
+
+    @Test
+    void testCreateBoard_EmptyContent() {
+        // Given
+        String title = "Test Title";
+        String content = "";
+
+        // When & Then
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            createService.createBoard(title, content);
+        });
+
+        assertEquals("내용은 비어 있을 수 없습니다.", exception.getMessage());
+    }
+}
+

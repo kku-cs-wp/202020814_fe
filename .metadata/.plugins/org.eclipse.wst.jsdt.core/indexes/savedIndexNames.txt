@@ -1,0 +1,8 @@
+INDEX VERSION 1.4+C:\Users\gadin\OneDrive\바탕 화면\3학년 2학기\고급 웹 프로그래밍\202020814\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
+3219955367.index
+3605488536.index
+3511462357.index
+567245378.index
+214144674.index
+1187168555.index
+327323458.index
