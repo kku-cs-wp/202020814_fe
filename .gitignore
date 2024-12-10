@@ -1,0 +1,9 @@
+# Ignore everything
+*
+
+# Allow specific folders and files
+!wsd/
+!wsd/src/       # Include src folder
+!wsd/src/**     # Include all files and subdirectories inside src
+!wsd/pom.xml    # Include pom.xml file
+!.gitignore
