@@ -1,7 +1,0 @@
-# Ignore everything
-*
-
-# Allow only the specific folders and files
-!src/
-!.gitignore
-!pom.xml
