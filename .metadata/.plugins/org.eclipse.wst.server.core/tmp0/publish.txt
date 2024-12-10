@@ -1,3 +1,0 @@
-#Tomcat publish data
-#Mon Dec 09 14:02:13 KST 2024
-org.eclipse.jst.jee.server\:/binary\:C\:\\Users\\gadin\\.m2\\repository\\org\\springframework\\spring-web\\6.1.14\\spring-web-6.1.14.jar=WEB-INF/lib/spring-web-6.1.14.jar
