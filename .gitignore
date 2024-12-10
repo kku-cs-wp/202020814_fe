@@ -1,0 +1,8 @@
+# Ignore everything
+*
+
+# Allow specific folders and files
+!wsd/
+!wsd/src
+!wsd/pom.xml
+!.gitignore
